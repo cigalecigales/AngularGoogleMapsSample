@@ -40,10 +40,18 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
         }
 
         $scope.getDirections = function() {
+            var travelModeList = document.getElementsByName("travelMode");
+            var travelMode = "DRIVING";
+            for (var i = 0; i < travelModeList.length; i++) {
+                if (travelModeList[i].checked) {
+                    travelMode = travelModeList[i].value;
+                }
+            }
+
             var request = {
                 origin: $scope.directions.origin,
                 destination: $scope.directions.destination,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                travelMode: google.maps.DirectionsTravelMode[travelMode]
             };
             directionsService.route(request, function(response, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
