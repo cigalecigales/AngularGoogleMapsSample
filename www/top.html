@@ -1,3 +1,11 @@
 <ons-page ng-controller="TopPageController">
-  <ui-gmap-google-map center="map.center" zoom="map.zoom" options="map.options"></ui-gmap-google-map>
+  <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options">
+    <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>
+  </ui-gmap-google-map>
+  <br>
+  <input type="text" ng-model="directions.origin" placeholder="origin"/><br>
+  <input type="text" ng-model="directions.destination" placeholder="destination"/><br>
+  <button ng-click="getDirections()">DIRECTIONS</button>
+
+  <div id="directionsList" ng-show="directions.showList"></div>
 </ons-page>
