@@ -1,4 +1,4 @@
-var app = ons.bootstrap('AngularGoogleMapsSample', ['onsen', 'uiGmapgoogle-maps']);
+var app = ons.bootstrap('AngularGoogleMapsSample', ['onsen', 'uiGmapgoogle-maps', 'ngSanitize']);
 
 app.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
@@ -6,63 +6,60 @@ app.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     });
 }]);
 
-app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($scope, uiGmapGoogleMapApi) {
+app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', '$sce', function($scope, uiGmapGoogleMapApi, $sce) {
     uiGmapGoogleMapApi.then(function(maps) {
+
         $scope.map = {
-            control: {},
             center: {
-                latitude: 35.681382,
-                longitude: 139.766084
+                latitude: 35.681298,
+                longitude: 139.766247
             },
             zoom: 12,
             options: {
-                mapTypeId: google.maps.MapTypeId.HYBRID
-            },
-            markers: [{
-                id: 1,
-                latitude: 35.681382,
-                longitude: 139.766084
-            }, {
-                id: 2,
-                latitude: 35.628856,
-                longitude: 139.738854
-            }]
+                scrollwheel: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
         };
 
-        var directionsDisplay = new google.maps.DirectionsRenderer();
-        var directionsService = new google.maps.DirectionsService();
-        var geocoder = new google.maps.Geocoder();
+        // ウィンドウ表示するかどうかフラグ
+        $scope.windowOptions = {
+            visible: false
+        };
 
-        $scope.directions = {
-            origin: "Collins St, Melbourne, Australia",
-            destination: "MCG Melbourne, Australia",
-            showList: false
-        }
-
-        $scope.getDirections = function() {
-            var travelModeList = document.getElementsByName("travelMode");
-            var travelMode = "DRIVING";
-            for (var i = 0; i < travelModeList.length; i++) {
-                if (travelModeList[i].checked) {
-                    travelMode = travelModeList[i].value;
-                }
-            }
-
-            var request = {
-                origin: $scope.directions.origin,
-                destination: $scope.directions.destination,
-                travelMode: google.maps.DirectionsTravelMode[travelMode]
+        // マーカークリック時のイベント
+        $scope.onClick = function(marker, eventName, model) {
+            $scope.windowOptions.visible = true;
+            $scope.selectedHotel = model;
+            $scope.rating = {
+                number: 10
             };
-            directionsService.route(request, function(response, status) {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    directionsDisplay.setDirections(response);
-                    directionsDisplay.setMap($scope.map.control.getGMap());
-                    directionsDisplay.setPanel(document.getElementById('directionsList'));
-                    $scope.directions.showList = true;
-                } else {
-                    alert('Google route unsuccesfull!');
-                }
-            });
-        }
+        };
+
+        // ウィンドウクローズ時のイベント
+        $scope.closeWindow = function() {
+            $scope.windowOptions.visible = false;
+        };
+
+        $scope.markers = [{
+            latitude: 35.681298,
+            longitude: 139.766247,
+            show: false,
+            id: 0
+        }];
     });
 }]);
+
+app.directive('customer',
+    function() {
+        return {
+            restrict: "AE", // ディレクティブの設定先
+            replace: true, // 現在の要素をテンプレートで置き換えるかどうか
+            scope: { // ディレクティブに適用するスコープ
+                // '='は双方向バインディング, '&'は関数, '@'は親スコープからローカルスコープへ単方向バインディング
+                number: "@"
+            },
+            template: function() {
+                return '<div class="info_window"> Taro Yamada' + '<a class="start_visit" href="http://google.com"> OK </a>' + '</div>';
+            }
+        };
+    });
