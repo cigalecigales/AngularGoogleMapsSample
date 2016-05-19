@@ -4,3 +4,4 @@
 ## about branches
 * master --- get directions sample. (this is old sample. i don't remember so much.)
 * current_position --- get current position sample.
+* search_route --- input origin and destination, click button, search route.
