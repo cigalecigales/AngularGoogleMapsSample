@@ -1,4 +1,16 @@
 .angular-google-map-container {
-  height: 200px;
+  height: 300px;
   width: 100%;
+}
+
+.info_window {
+  width: 100px;
+  height: 40px;
+}
+
+.start_visit {
+  display: block;
+  width: 60px;
+  height: 20px;
+  background: #d1ed80;
 }
