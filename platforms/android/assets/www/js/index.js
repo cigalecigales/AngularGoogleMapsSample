@@ -1,4 +1,4 @@
-var app = ons.bootstrap('AngularGoogleMapsSample', ['onsen', 'uiGmapgoogle-maps', 'ngSanitize']);
+var app = ons.bootstrap('AngularGoogleMapsSample', ['onsen', 'uiGmapgoogle-maps']);
 
 app.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
@@ -6,7 +6,7 @@ app.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     });
 }]);
 
-app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', '$sce', function($scope, uiGmapGoogleMapApi, $sce) {
+app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($scope, uiGmapGoogleMapApi) {
     uiGmapGoogleMapApi.then(function(maps) {
 
         $scope.map = {
@@ -49,17 +49,16 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', '$sce', fun
     });
 }]);
 
-app.directive('customer',
-    function() {
-        return {
-            restrict: "AE", // ディレクティブの設定先
-            replace: true, // 現在の要素をテンプレートで置き換えるかどうか
-            scope: { // ディレクティブに適用するスコープ
-                // '='は双方向バインディング, '&'は関数, '@'は親スコープからローカルスコープへ単方向バインディング
-                number: "@"
-            },
-            template: function() {
-                return '<div class="info_window"> Taro Yamada' + '<a class="start_visit" href="http://google.com"> OK </a>' + '</div>';
-            }
-        };
-    });
+app.directive('customer', function() {
+    return {
+        restrict: "AE", // ディレクティブの設定先
+        replace: true, // 現在の要素をテンプレートで置き換えるかどうか
+        scope: { // ディレクティブに適用するスコープ
+            // '='は双方向バインディング, '&'は関数, '@'は親スコープからローカルスコープへ単方向バインディング
+            number: "@"
+        },
+        template: function() {
+            return '<div class="info_window"> Taro Yamada' + '<a class="start_visit" href="http://google.com"> OK </a>' + '</div>';
+        }
+    };
+});
