@@ -6,3 +6,4 @@
 * current_position --- get current position sample.
 * search_route --- input origin and destination, click button, search route.
 * delete_japan_string --- search route, get result json, and delete string "日本, " in json.
+* display_custom_infowindow --- display custom info window when you click a marker.
