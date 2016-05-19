@@ -2,14 +2,4 @@
   <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.control" options="map.options">
     <ui-gmap-markers models="map.markers" coords="'self'"></ui-gmap-markers>
   </ui-gmap-google-map>
-  <br>
-  <input type="text" ng-model="directions.origin" placeholder="origin"/><br>
-  <input type="text" ng-model="directions.destination" placeholder="destination"/><br>
-  <input type="radio" name="travelMode" value="DRIVING" checked /> DRIVING
-  <input type="radio" name="travelMode" value="WALKING"/> WALKING
-  <input type="radio" name="travelMode" value="BICYCLING"/> BICYCLING
-  <input type="radio" name="travelMode" value="TRANSIT"/> TRANSIT
-  <button ng-click="getDirections()">DIRECTIONS</button>
-
-  <div id="directionsList" ng-show="directions.showList"></div>
 </ons-page>

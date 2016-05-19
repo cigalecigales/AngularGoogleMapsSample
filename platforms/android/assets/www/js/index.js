@@ -16,7 +16,7 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
             },
             zoom: 12,
             options: {
-                mapTypeId: google.maps.MapTypeId.HYBRID
+                mapTypeId: google.maps.MapTypeId.ROADMAP
             },
             markers: [{
                 id: 1,
