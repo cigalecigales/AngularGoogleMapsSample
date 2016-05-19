@@ -36,9 +36,9 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
 
         $scope.directions = {
             // FROM
-            origin: "Collins St, Melbourne, Australia",
+            origin: "東京駅",
             // TO
-            destination: "MCG Melbourne, Australia",
+            destination: "新宿駅",
             showList: false
         }
 
@@ -61,8 +61,8 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
             //ルート検索サービスの呼び出し
             directionsService.route(request, function(response, status) {
                 if (status === google.maps.DirectionsStatus.OK) {
-                  // 画面にルート情報を表示
-                    directionsDisplay.setDirections(response);
+                    // 画面にルート情報を表示
+                    directionsDisplay.setDirections(deleteJapanString(response)); // 文字削除したデータをセット
                     directionsDisplay.setMap($scope.map.control.getGMap());
                     directionsDisplay.setPanel(document.getElementById('directionsList'));
                     $scope.directions.showList = true;
@@ -70,6 +70,29 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
                     alert('Google route unsuccesfull!');
                 }
             });
+        };
+
+        // JSONから「日本, 」という文字を削除する処理
+        function deleteJapanString(data) {
+          // 該当部分の文字列取得
+          var origin = data.routes[0].legs[0].start_address;
+          var destination = data.routes[0].legs[0].end_address;
+          // 削除したい文字列
+          var delete_target = "日本, ";
+
+          // 削除したい文字列があるかどうかチェック
+          var origin_index = origin.indexOf(delete_target);
+          var dest_index = destination.indexOf(delete_target);
+
+          // 該当文字列がある場合は削除する
+          if (origin_index >= 0) {
+            data.routes[0].legs[0].start_address = origin.slice(origin_index + delete_target.length);
+          }
+          if (dest_index >= 0) {
+            data.routes[0].legs[0].end_address = destination.slice(origin_index + delete_target.length);
+          }
+
+          return data;
         }
     });
 }]);
