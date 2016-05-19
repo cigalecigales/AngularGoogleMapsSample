@@ -1,8 +1,8 @@
 <ons-page ng-controller="TopPageController">
     <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" events="map.events">
-        <ui-gmap-window coords="selectedHotel" show="windowOptions.visible" closeclick="closeWindow">
+        <ui-gmap-window coords="selectedItem" show="windowOptions.visible" closeclick="closeWindow">
             <div>
-                <div>{{selectedHotel.title}}</div>
+                <div>{{selectedItem.title}}</div>
                 <div customer number="{{rating.number}}"></div>
             </div>
         </ui-gmap-window>
