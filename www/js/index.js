@@ -17,52 +17,43 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
             zoom: 12,
             options: {
                 mapTypeId: google.maps.MapTypeId.ROADMAP
-            },
-            markers: [{
-                id: 1,
-                latitude: 35.681382,
-                longitude: 139.766084
-            }, {
-                id: 2,
-                latitude: 35.628856,
-                longitude: 139.738854
-            }]
+            }
         };
 
-        var directionsDisplay = new google.maps.DirectionsRenderer();
-        var directionsService = new google.maps.DirectionsService();
-        var geocoder = new google.maps.Geocoder();
+        $scope.markers = [{
+            id: 1,
+            latitude: 35.681382,
+            longitude: 139.766084
+        }, {
+            id: 2,
+            latitude: 35.628856,
+            longitude: 139.738854
+        }];
 
-        $scope.directions = {
-            origin: "Collins St, Melbourne, Australia",
-            destination: "MCG Melbourne, Australia",
-            showList: false
-        }
-
-        $scope.getDirections = function() {
-            var travelModeList = document.getElementsByName("travelMode");
-            var travelMode = "DRIVING";
-            for (var i = 0; i < travelModeList.length; i++) {
-                if (travelModeList[i].checked) {
-                    travelMode = travelModeList[i].value;
-                }
-            }
-
-            var request = {
-                origin: $scope.directions.origin,
-                destination: $scope.directions.destination,
-                travelMode: google.maps.DirectionsTravelMode[travelMode]
-            };
-            directionsService.route(request, function(response, status) {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    directionsDisplay.setDirections(response);
-                    directionsDisplay.setMap($scope.map.control.getGMap());
-                    directionsDisplay.setPanel(document.getElementById('directionsList'));
-                    $scope.directions.showList = true;
-                } else {
-                    alert('Google route unsuccesfull!');
-                }
-            });
-        }
+        $scope.polyline = {
+            id: 1,
+            path: [{
+                latitude: $scope.markers[0].latitude,
+                longitude: $scope.markers[0].longitude
+            }, {
+                latitude: $scope.markers[1].latitude,
+                longitude: $scope.markers[1].longitude
+            }],
+            stroke: {
+                color: '#6060FB',
+                weight: 3
+            },
+            editable: true,
+            draggable: true,
+            geodesic: true,
+            visible: true,
+            icons: [{
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE
+                },
+                offset: '25px',
+                repeat: '50px'
+            }]
+        };
     });
 }]);
