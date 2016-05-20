@@ -1,11 +1,24 @@
 <ons-page ng-controller="TopPageController">
-    <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" events="map.events">
-        <ui-gmap-window coords="selectedItem" show="windowOptions.visible" closeclick="closeWindow">
-            <div>
-                <div>{{selectedItem.title}}</div>
-                <div customer number="{{rating.number}}"></div>
-            </div>
-        </ui-gmap-window>
-        <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="onClick"></ui-gmap-markers>
-    </ui-gmap-google-map>
+    <div id="map_area">
+        <ui-gmap-google-map center="map.center" control="map.control" zoom="map.zoom" draggable="true" options="options" events="map.events">
+            <ui-gmap-window coords="selectedItem" show="windowOptions.visible" closeclick="closeWindow">
+                <div>
+                    <div>{{selectedItem.title}}</div>
+                    <div customer number="{{rating.number}}"></div>
+                </div>
+            </ui-gmap-window>
+            <ui-gmap-markers models="markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+
+            <ui-gmap-markers models="route_markers" coords="'self'" icon="'icon'" click="onClick"></ui-gmap-markers>
+        </ui-gmap-google-map>
+    </div>
+
+    <br>
+    <label>FROM:
+        <input type="text" ng-model="directions.origin" placeholder="origin"/></label><br>
+    <label>TO: ><input type="text" ng-model="directions.destination" placeholder="destination"/></label><br>
+    <br>
+    <button ng-click="getDirections()">DIRECTIONS</button>
+
+    <div id="directionsList" ng-show="directions.showList"></div>
 </ons-page>

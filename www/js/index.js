@@ -10,6 +10,7 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
     uiGmapGoogleMapApi.then(function(maps) {
 
         $scope.map = {
+            control: {},
             center: {
                 latitude: 35.681298,
                 longitude: 139.766247
@@ -40,12 +41,91 @@ app.controller("TopPageController", ['$scope', 'uiGmapGoogleMapApi', function($s
             $scope.windowOptions.visible = false;
         };
 
+        // その他のマーカー
         $scope.markers = [{
             latitude: 35.681298,
             longitude: 139.766247,
             show: false,
             id: 0
         }];
+        // ルート検索後用のマーカー
+        $scope.route_markers = [];
+
+        // ルート情報の表示サービス
+        var directionsDisplay = new google.maps.DirectionsRenderer();
+        // ルート検索サービス
+        var directionsService = new google.maps.DirectionsService();
+
+        // FROMとTO
+        $scope.directions = {
+            // FROM
+            origin: "Shinbashi station",
+            // TO
+            destination: "Shinjuku station",
+            showList: false
+        }
+
+        // ルート取得処理
+        $scope.getDirections = function() {
+            // リクエストを作成
+            var request = {
+                origin: $scope.directions.origin, // FROM
+                destination: $scope.directions.destination, // TO
+                travelMode: google.maps.DirectionsTravelMode["DRIVING"] // モード
+            };
+            //ルート検索サービスの呼び出し
+            directionsService.route(request, function(response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+
+                    // 画面にルート情報を表示
+                    directionsDisplay.setDirections(response);
+                    directionsDisplay.setMap($scope.map.control.getGMap());
+                    //getStartAndEndPoint(data);
+                    directionsDisplay.setOptions({
+                        suppressMarkers: true
+                    });
+                    getStartAndEndPoint(response);
+                    directionsDisplay.setPanel(document.getElementById('directionsList'));
+                    $scope.directions.showList = true;
+                } else {
+                    alert('Google route unsuccesfull!');
+                }
+            });
+        };
+
+        // マップ上に出発点と到着点のマーカーを追加する
+        function getStartAndEndPoint(data) {
+          // JSONデータから出発点と到着点を取得
+          var origin = data.routes[0].legs[0].start_location;
+          var destination = data.routes[0].legs[0].end_location;
+
+          var start = {
+            lat: origin.lat(),
+            lng: origin.lng()
+          };
+          var stop = {
+            lat: destination.lat(),
+            lng: destination.lng()
+          }
+
+          createMarker(start, stop);
+        };
+
+        // マーカーを作成する
+        function createMarker(start, stop) {
+          $scope.route_markers.push({
+              latitude: start.lat,
+              longitude: start.lng,
+              show: false,
+              id: 1
+          },{
+            latitude: stop.lat,
+            longitude: stop.lng,
+            show: false,
+            id: 2,
+            icon: "img/map_icon.png"
+          });
+        };
     });
 }]);
 
